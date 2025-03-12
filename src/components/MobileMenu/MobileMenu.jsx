@@ -1,70 +1,114 @@
-import React from 'react';
-import styled from 'styled-components';
-import * as Dialog from '@radix-ui/react-dialog';
+import React from "react";
+import styled, { keyframes } from "styled-components";
+import * as Dialog from "@radix-ui/react-dialog";
 
-import { QUERIES, WEIGHTS } from '../../constants';
+import { QUERIES, WEIGHTS } from "../../constants";
 
-import UnstyledButton from '../UnstyledButton';
-import Icon from '../Icon';
-import VisuallyHidden from '../VisuallyHidden';
+import UnstyledButton from "../UnstyledButton";
+import Icon from "../Icon";
+import VisuallyHidden from "../VisuallyHidden";
 
 const MobileMenu = ({ isOpen, onDismiss }) => {
   return (
     <Dialog.Root open={isOpen} onOpenChange={onDismiss}>
       <Dialog.Portal>
-        <Overlay />
+        <Wrapper>
+          <Backdrop />
+        </Wrapper>
         <Content>
-          <CloseButton onClick={onDismiss}>
-            <Icon id="close" />
-            <VisuallyHidden>Dismiss menu</VisuallyHidden>
-          </CloseButton>
-          <VisuallyHidden>
-            <Dialog.Title>Mobile navigation</Dialog.Title>
-            <Dialog.Description>Mobile navigation</Dialog.Description>
-          </VisuallyHidden>
-          <Filler />
-          <Nav>
-            <NavLink href="/sale">Sale</NavLink>
-            <NavLink href="/new">New&nbsp;Releases</NavLink>
-            <NavLink href="/men">Men</NavLink>
-            <NavLink href="/women">Women</NavLink>
-            <NavLink href="/kids">Kids</NavLink>
-            <NavLink href="/collections">Collections</NavLink>
-          </Nav>
-          <Footer>
-            <SubLink href="/terms">Terms and Conditions</SubLink>
-            <SubLink href="/privacy">Privacy Policy</SubLink>
-            <SubLink href="/contact">Contact Us</SubLink>
-          </Footer>
+          <InnerWrapper>
+            <CloseButton onClick={onDismiss}>
+              <Icon id="close" />
+              <VisuallyHidden>Dismiss menu</VisuallyHidden>
+            </CloseButton>
+            <VisuallyHidden>
+              <Dialog.Title>Mobile navigation</Dialog.Title>
+              <Dialog.Description>Mobile navigation</Dialog.Description>
+            </VisuallyHidden>
+            <Filler />
+            <Nav>
+              <NavLink href="/sale">Sale</NavLink>
+              <NavLink href="/new">New&nbsp;Releases</NavLink>
+              <NavLink href="/men">Men</NavLink>
+              <NavLink href="/women">Women</NavLink>
+              <NavLink href="/kids">Kids</NavLink>
+              <NavLink href="/collections">Collections</NavLink>
+            </Nav>
+            <Footer>
+              <SubLink href="/terms">Terms and Conditions</SubLink>
+              <SubLink href="/privacy">Privacy Policy</SubLink>
+              <SubLink href="/contact">Contact Us</SubLink>
+            </Footer>
+          </InnerWrapper>
         </Content>
       </Dialog.Portal>
     </Dialog.Root>
   );
 };
 
-const Overlay = styled(Dialog.Overlay)`
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+`;
+
+const slideIn = keyframes`
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+`;
+
+const Wrapper = styled(Dialog.Overlay)`
   position: fixed;
   inset: 0;
+  background: transparent;
+`;
+
+const Backdrop = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: var(--color-backdrop);
+  animation: ${fadeIn} 500ms;
 `;
 
 const Content = styled(Dialog.Content)`
+  --overfill: 16px;
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   background: white;
-  width: 300px;
+  width: calc(300px + var(--overfill));
+  margin-right: calc(var(--overfill) * -1);
   height: 100%;
   padding: 24px 32px;
+  animation: ${slideIn} 500ms both cubic-bezier(0, 0.6, 0.32, 1.06);
+  animation-delay: 200ms;
+`;
+
+const InnerWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100%;
+  animation: ${fadeIn} 600ms both;
+  animation-delay: 400ms;
 `;
 
 const CloseButton = styled(UnstyledButton)`
   position: absolute;
   top: 10px;
-  right: 0;
+  right: var(--overfill);
   padding: 16px;
 `;
 
