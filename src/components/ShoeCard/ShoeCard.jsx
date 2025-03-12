@@ -139,9 +139,19 @@ const NewFlag = styled(Flag)`
   background-color: var(--color-secondary);
 `;
 
-const slideIn = keyframes`
+const slideInLeft = keyframes`
   from {
-    transform: translateX(100%);
+    transform: translateX(0%);
+  }
+
+  to {
+    transform: translateX(-120%);
+  }
+`;
+
+const slideInRight = keyframes`
+  from {
+    transform: translateX(120%);
   }
 
   to {
@@ -163,8 +173,12 @@ const Wrapper = styled.article`
   }
 
   &:hover ${FlagLabel} {
-    animation: ${slideIn} 500ms ease-in-out;
+    animation: ${slideInLeft} 500ms ease-in-out alternate both;
     animation-delay: 100ms;
+  }
+
+  ${FlagLabel} {
+    animation: ${slideInRight} 500ms ease-in-out alternate backwards;
   }
 `;
 export default ShoeCard;
